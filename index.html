@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Production Time Calculator</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        margin: 0;
+        padding: 20px;
+        color: #333;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        padding: 30px;
+        position: relative;
+        flex: 1;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+        position: relative;
+      }
+      h1 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-size: 32px;
+        font-weight: 700;
+      }
+      .subtitle {
+        color: #7f8c8d;
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+      .order-section {
+        background: linear-gradient(to right, #4b6cb7, #182848);
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        color: white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+      .order-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .order-info label {
+        font-weight: 600;
+        font-size: 18px;
+      }
+      .order-info input {
+        padding: 12px 15px;
+        border: none;
+        border-radius: 8px;
+        font-size: 18px;
+        width: 150px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .formula-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 25px;
+        background: #f0f7ff;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 5px solid #3498db;
+      }
+      .formula {
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      .formula span {
+        font-weight: 700;
+        color: #2c3e50;
+        background: #e8f4fc;
+        padding: 2px 8px;
+        border-radius: 5px;
+      }
+      .table-container {
+        margin-top: 20px;
+        overflow-x: auto;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: #34495e;
+        color: white;
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        text-align: center;
+      }
+      td {
+        text-align: center;
+      }
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      tr:hover {
+        background-color: #e8f4fc;
+        transition: background-color 0.3s;
+      }
+      .editable {
+        background-color: #fffde7;
+      }
+      .editable input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        text-align: center;
+        font-size: 16px;
+      }
+      .total-row {
+        background-color: #2c3e50;
+        color: white;
+        font-weight: bold;
+      }
+      .buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin: 40px 0;
+        flex-wrap: wrap;
+      }
+      button {
+        padding: 14px 30px;
+        border: none;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .btn-home {
+        background: linear-gradient(to right, #3498db, #2980b9);
+        color: white;
+      }
+      .btn-home:hover {
+        background: linear-gradient(to right, #2980b9, #1c6ea4);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+      .btn-reset {
+        background: linear-gradient(to right, #e74c3c, #c0392b);
+        color: white;
+      }
+      .btn-reset:hover {
+        background: linear-gradient(to right, #c0392b, #a93226);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+      .btn-print {
+        background: linear-gradient(to right, #27ae60, #229954);
+        color: white;
+      }
+      .btn-print:hover {
+        background: linear-gradient(to right, #229954, #1e8449);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+      .note {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #fffde7;
+        border-left: 5px solid #fbc02d;
+        border-radius: 8px;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      .calculation-result {
+        font-weight: 600;
+        color: #2c3e50;
+        background: #e8f4fc;
+        padding: 3px 8px;
+        border-radius: 4px;
+      }
+      @media (max-width: 768px) {
+        .order-info {
+          flex-direction: column;
+          align-items: flex-start;
+          margin-bottom: 15px;
+        }
+        .buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+        .order-section {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+      .logo {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #3498db;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 20px;
+        padding: 15px;
+        color: #7f8c8d;
+        font-size: 16px;
+        font-style: italic;
+      }
+      @media print {
+        body {
+          background: none;
+          padding: 0;
+        }
+        .container {
+          box-shadow: none;
+          margin: 0;
+          padding: 20px;
+        }
+        .buttons,
+        .note,
+        .logo {
+          display: none;
+        }
+        .order-section {
+          background: none;
+          color: #333;
+          box-shadow: none;
+          border-bottom: 1px solid #ddd;
+          padding-bottom: 15px;
+        }
+        .order-info input {
+          border: 1px solid #ddd;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">
+        <i class="fas fa-industry"></i>
+        <span>ProdCalc Pro</span>
+      </div>
+      <div class="header">
+        <h1>Production Time Calculator - Accessories</h1>
+        <div class="subtitle">
+          Calculate production times with accurate formulas
+        </div>
+      </div>
+      <div class="order-section">
+        <div class="order-info">
+          <label for="orderQty">Order Quantity:</label>
+          <input type="number" id="orderQty" value="1000" min="1" />
+        </div>
+      </div>
+      <div class="table-container">
+        <table id="productionTable">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Item</th>
+              <th>Number of Pcs</th>
+              <th>Process</th>
+              <th>Time (Per / Seconds)</th>
+              <th>Per hour capacity</th>
+              <th>Required Hours</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Table rows will be added dynamically -->
+          </tbody>
+          <tfoot>
+            <tr class="total-row">
+              <td colspan="6">Total Required Hours</td>
+              <td id="totalHours">0.00</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="buttons">
+        <button class="btn-home" onclick="goHome()">
+          <i class="fas fa-home"></i>
+          Back to Home
+        </button>
+        <button class="btn-reset" onclick="resetForm()">
+          <i class="fas fa-redo"></i>
+          Reset
+        </button>
+        <button class="btn-print" onclick="printPreview()">
+          <i class="fas fa-print"></i>
+          Print Preview
+        </button>
+      </div>
+      <div class="note">
+        <p>
+          <strong>Note:</strong> Calculations are performed automatically as you
+          input values. The
+          <span class="calculation-result">Per Hour Capacity</span> is
+          calculated as 3600 divided by (Number of Pieces × Time in Seconds).
+          <span class="calculation-result">Required Hours</span> is calculated
+          as Order Quantity divided by Per Hour Capacity.
+        </p>
+      </div>
+    </div>
+    <div class="footer">Prepared by Samantha</div>
+    <script src="script.js"></script>
+  </body>
+</html>
