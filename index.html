@@ -48,6 +48,36 @@
         font-size: 18px;
         margin-bottom: 20px;
       }
+      .tabs {
+        display: flex;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #e0e0e0;
+      }
+      .tab {
+        padding: 15px 30px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 600;
+        color: #7f8c8d;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .tab.active {
+        color: #3498db;
+        border-bottom: 3px solid #3498db;
+      }
+      .tab:hover {
+        color: #3498db;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
       .order-section {
         background: linear-gradient(to right, #4b6cb7, #182848);
         border-radius: 12px;
@@ -230,6 +260,17 @@
           width: 100%;
           justify-content: center;
         }
+        .tabs {
+          flex-direction: column;
+        }
+        .tab {
+          border-bottom: 1px solid #e0e0e0;
+          border-left: 3px solid transparent;
+        }
+        .tab.active {
+          border-bottom: 1px solid #e0e0e0;
+          border-left: 3px solid #3498db;
+        }
       }
       .logo {
         position: absolute;
@@ -262,8 +303,12 @@
         }
         .buttons,
         .note,
-        .logo {
+        .logo,
+        .tabs {
           display: none;
+        }
+        .tab-content {
+          display: block !important;
         }
         .order-section {
           background: none;
@@ -290,50 +335,114 @@
           Calculate production times with accurate formulas
         </div>
       </div>
-      <div class="order-section">
-        <div class="order-info">
-          <label for="orderQty">Order Quantity:</label>
-          <input type="number" id="orderQty" value="1000" min="1" />
+
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('steel')">
+          <i class="fas fa-cube"></i>
+          <span>Steel</span>
+        </div>
+        <div class="tab" onclick="switchTab('alloy')">
+          <i class="fas fa-cog"></i>
+          <span>Alloy</span>
         </div>
       </div>
-      <div class="table-container">
-        <table id="productionTable">
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Item</th>
-              <th>Number of Pcs</th>
-              <th>Process</th>
-              <th>Time (Per / Seconds)</th>
-              <th>Per hour capacity</th>
-              <th>Required Hours</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Table rows will be added dynamically -->
-          </tbody>
-          <tfoot>
-            <tr class="total-row">
-              <td colspan="6">Total Required Hours</td>
-              <td id="totalHours">0.00</td>
-            </tr>
-          </tfoot>
-        </table>
+
+      <!-- Steel Tab Content -->
+      <div id="steel-tab" class="tab-content active">
+        <div class="order-section">
+          <div class="order-info">
+            <label for="steelOrderQty">Order Quantity-Steel:</label>
+            <input type="number" id="steelOrderQty" value="1000" min="1" />
+          </div>
+        </div>
+        <div class="table-container">
+          <table id="steelProductionTable">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Item</th>
+                <th>Number of Pcs</th>
+                <th>Process</th>
+                <th>Time (Per / Seconds)</th>
+                <th>Per hour capacity</th>
+                <th>Required Hours</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Table rows will be added dynamically -->
+            </tbody>
+            <tfoot>
+              <tr class="total-row">
+                <td colspan="6">Total Required Hours</td>
+                <td id="steelTotalHours">0.00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="buttons">
+          <button class="btn-home" onclick="goHome()">
+            <i class="fas fa-home"></i>
+            Back to Home
+          </button>
+          <button class="btn-reset" onclick="resetForm('steel')">
+            <i class="fas fa-redo"></i>
+            Reset
+          </button>
+          <button class="btn-print" onclick="printPreview()">
+            <i class="fas fa-print"></i>
+            Print Preview
+          </button>
+        </div>
       </div>
-      <div class="buttons">
-        <button class="btn-home" onclick="goHome()">
-          <i class="fas fa-home"></i>
-          Back to Home
-        </button>
-        <button class="btn-reset" onclick="resetForm()">
-          <i class="fas fa-redo"></i>
-          Reset
-        </button>
-        <button class="btn-print" onclick="printPreview()">
-          <i class="fas fa-print"></i>
-          Print Preview
-        </button>
+
+      <!-- Alloy Tab Content -->
+      <div id="alloy-tab" class="tab-content">
+        <div class="order-section">
+          <div class="order-info">
+            <label for="alloyOrderQty">Order Quantity-Alloy:</label>
+            <input type="number" id="alloyOrderQty" value="600" min="1" />
+          </div>
+        </div>
+        <div class="table-container">
+          <table id="alloyProductionTable">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Item</th>
+                <th>Number of Pcs</th>
+                <th>Process</th>
+                <th>Time (Per / Seconds)</th>
+                <th>Per hour capacity</th>
+                <th>Required Hours</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Table rows will be added dynamically -->
+            </tbody>
+            <tfoot>
+              <tr class="total-row">
+                <td colspan="6">Total Required Hours</td>
+                <td id="alloyTotalHours">0.00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="buttons">
+          <button class="btn-home" onclick="goHome()">
+            <i class="fas fa-home"></i>
+            Back to Home
+          </button>
+          <button class="btn-reset" onclick="resetForm('alloy')">
+            <i class="fas fa-redo"></i>
+            Reset
+          </button>
+          <button class="btn-print" onclick="printPreview()">
+            <i class="fas fa-print"></i>
+            Print Preview
+          </button>
+        </div>
       </div>
+
       <div class="note">
         <p>
           <strong>Note:</strong> Calculations are performed automatically as you
